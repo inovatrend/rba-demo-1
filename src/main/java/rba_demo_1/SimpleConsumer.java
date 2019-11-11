@@ -21,6 +21,7 @@ public class SimpleConsumer {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-group-1");
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        config.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(config);
 
@@ -31,7 +32,6 @@ public class SimpleConsumer {
             ConsumerRecords<String, String> records = consumer.poll(Duration.of(100, ChronoUnit.MILLIS));
             for (ConsumerRecord<String, String> record : records) {
                 System.out.println("Consumed message, key: " + record.key() + ", value: " + record.value());
-                Thread.sleep(1000);
             }
             consumer.commitAsync();
         }
